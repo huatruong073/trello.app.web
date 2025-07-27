@@ -1,13 +1,21 @@
-import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
+import { Navigate } from "react-router";
+import { useAuth } from "~/contexts/auth.context";
+import { LoadingPage } from "~/components/loading";
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Trello App" },
+    { name: "description", content: "Welcome to Trello App!" },
   ];
 }
 
 export default function Home() {
-  return <Welcome />;
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <LoadingPage />;
+  }
+
+  // Redirect to dashboard if authenticated, login if not
+  return <Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />;
 }
