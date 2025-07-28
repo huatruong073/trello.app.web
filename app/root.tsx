@@ -44,7 +44,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
     <AuthProvider>
-      <Outlet />
+      <div className="w-full min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-100">
+        <Outlet />
+      </div>
     </AuthProvider>
   );
 }
