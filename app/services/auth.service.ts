@@ -44,9 +44,9 @@ export class AuthService {
     }
   }
 
-  async logout(refreshToken: string): Promise<void> {
+  async logout(): Promise<void> {
     try {
-      await httpClient.post("/Auth/logout", { refreshToken });
+      await httpClient.post("/Auth/logout", {});
     } catch (error) {
       // Logout errors are not critical, log but don't throw
       console.warn("Logout request failed:", error);

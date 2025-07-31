@@ -159,8 +159,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = async (): Promise<void> => {
-    if (state.refreshToken) {
-      await authService.logout(state.refreshToken);
+    if (state.accessToken) {
+      await authService.logout();
     }
     authService.clearStoredTokens();
     dispatch({ type: "LOGOUT" });
