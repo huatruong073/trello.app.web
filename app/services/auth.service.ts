@@ -1,9 +1,9 @@
-import type {
-  LoginRequest,
-  LoginResponse,
-  ResponseMessage,
-} from "~/types/auth";
-import { httpClient, ApiError } from "~/services/http-client";
+import {
+  ApiError,
+  httpClient,
+  type ResponseMessage,
+} from "~/services/http-client";
+import type { LoginRequest } from "~/types/auth";
 
 export class AuthService {
   private static instance: AuthService;

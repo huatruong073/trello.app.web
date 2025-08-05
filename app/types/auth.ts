@@ -30,10 +30,3 @@ export interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
 }
-
-export interface ResponseMessage {
-  Success: boolean;
-  Data?: any;
-  Message: string;
-  StatusCode: number;
-}

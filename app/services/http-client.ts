@@ -11,6 +11,13 @@ export interface ApiResponse<T = any> {
   errors?: string[];
 }
 
+export interface ResponseMessage<T = any> {
+  Success: boolean;
+  Message?: string;
+  Data?: T;
+  StatusCode: number;
+}
+
 export interface PaginatedResponse<T> extends ApiResponse<T[]> {
   totalCount: number;
   pageNumber: number;
