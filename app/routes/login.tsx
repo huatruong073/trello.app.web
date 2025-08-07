@@ -8,16 +8,11 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const { login, isAuthenticated, isLoading } = useAuth();
   const navigate = useNavigate();
 
   // Redirect nếu đã đăng nhập
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   if (isAuthenticated) {
     return <Navigate to="/dashboard" replace />;
   }
@@ -25,22 +20,19 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setLoading(true);
-
     try {
       await login(email, password);
       navigate("/dashboard");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Đăng nhập thất bại");
     } finally {
-      setLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-column border-round-xl min-h-screen bg-gray-100">
+    <div className="flex flex-column border-round-xl min-h-screen bg-gray-100 relative">
       <div className="align-self-center mt-auto mb-auto">
-        <div className="pages-panel card flex flex-column shadow-4 px-3 py-5 border-round-md">
+        <div className="pages-panel card flex flex-column shadow-4 px-3 py-3 border-round-md">
           <div className="pages-header px-3 py-1 border-bottom-1 border-300">
             <h2 className="text-primary">LOGIN</h2>
           </div>
@@ -90,15 +82,22 @@ export default function Login() {
                 className="login-button mb-3"
                 label="LOGIN"
                 icon="pi pi-sign-in"
-                loading={loading}
-                disabled={loading}
+                loading={isLoading}
+                disabled={isLoading}
               />
             </div>
             <div className="text-center mt-2 mb-4">
               <span className="text-color-secondary mr-2">
                 Don't have an account?
               </span>
-              <a href="#" className="font-medium text-primary">
+              <a
+                className={`font-medium cursor-pointer text-primary ${isLoading ? " pointer-events-none opacity-60" : ""}`}
+                aria-disabled={isLoading}
+                onClick={(e) => {
+                  if (isLoading) e.preventDefault();
+                  navigate("/register");
+                }}
+              >
                 Register
               </a>
             </div>
