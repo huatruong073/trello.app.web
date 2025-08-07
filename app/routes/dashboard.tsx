@@ -9,10 +9,10 @@ export default function Dashboard() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen surface-ground">
         <Header />
-        <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-          <div className="px-4 py-6 sm:px-0">
+        <main className="max-w-7xl mx-auto py-6 px-3 md:px-6">
+          <div className="p-4">
             <BoardsList />
           </div>
         </main>

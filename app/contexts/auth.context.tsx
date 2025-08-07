@@ -86,7 +86,26 @@ interface AuthContextType {
   refreshAuthToken: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+// Tạo giá trị mặc định cho context để tránh lỗi null
+const defaultContext: AuthContextType = {
+  user: null,
+  accessToken: null,
+  refreshToken: null,
+  isAuthenticated: false,
+  isLoading: false,
+  login: async () => {
+    throw new Error("AuthProvider not initialized");
+  },
+  logout: async () => {
+    throw new Error("AuthProvider not initialized");
+  },
+  refreshAuthToken: async () => {
+    throw new Error("AuthProvider not initialized");
+  },
+};
+
+// Tạo context với giá trị mặc định
+const AuthContext = createContext<AuthContextType>(defaultContext);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(authReducer, initialState);
@@ -207,8 +226,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export function useAuth(): AuthContextType {
   const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
+  if (!context) {
+    console.error("useAuth must be used within an AuthProvider");
   }
   return context;
 }

@@ -1,27 +1,18 @@
+import { Button } from "primereact/button";
+import { InputText } from "primereact/inputtext";
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router";
 import { useAuth } from "~/contexts/auth.context";
-import { LoadingSpinner } from "~/components/loading";
-import { Field, Input, Label } from "@headlessui/react";
 
 export default function Login() {
-  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { login, isAuthenticated, isLoading } = useAuth();
   const navigate = useNavigate();
 
   // Redirect nếu đã đăng nhập
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <LoadingSpinner />
-      </div>
-    );
-  }
-
   if (isAuthenticated) {
     return <Navigate to="/dashboard" replace />;
   }
@@ -29,90 +20,93 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setIsSubmitting(true);
-
     try {
-      await login(userName, password);
+      await login(email, password);
       navigate("/dashboard");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Đăng nhập thất bại");
     } finally {
-      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white/80 backdrop-blur-sm shadow-xl rounded-xl p-8">
-        <div>
-          <h2 className="mt-2 text-center text-3xl font-extrabold text-gray-900">
-            Đăng nhập vào Trello
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Nhập thông tin đăng nhập của bạn
-          </p>
+    <div className="flex flex-column border-round-xl min-h-screen bg-gray-100 relative">
+      <div className="align-self-center mt-auto mb-auto">
+        <div className="pages-panel card flex flex-column shadow-4 px-3 py-3 border-round-md">
+          <div className="pages-header px-3 py-1 border-bottom-1 border-300">
+            <h2 className="text-primary">LOGIN</h2>
+          </div>
+
+          <h3 className="font-medium mt-3 mx-3">Welcome Back</h3>
+
+          <div className="pages-detail mb-4 px-6 text-color-secondary">
+            Please sign in to your account to access the Trello App
+          </div>
+
+          <form onSubmit={handleSubmit} className="p-fluid">
+            <div className="input-panel flex flex-column px-3">
+              {error && <div className="p-error mb-3 text-center">{error}</div>}
+              <div className="p-inputgroup">
+                <span className="p-inputgroup-addon">
+                  <i className="pi pi-envelope"></i>
+                </span>
+                <span className="p-float-label">
+                  <InputText
+                    type="text"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                  <label htmlFor="email">Email</label>
+                </span>
+              </div>
+
+              <div className="p-inputgroup mt-3 mb-4">
+                <span className="p-inputgroup-addon">
+                  <i className="pi pi-lock"></i>
+                </span>
+                <span className="p-float-label">
+                  <InputText
+                    type="password"
+                    id="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                  <label htmlFor="password">Password</label>
+                </span>
+              </div>
+              <Button
+                type="submit"
+                className="login-button mb-3"
+                label="LOGIN"
+                icon="pi pi-sign-in"
+                loading={isLoading}
+                disabled={isLoading}
+              />
+            </div>
+            <div className="text-center mt-2 mb-4">
+              <span className="text-color-secondary mr-2">
+                Don't have an account?
+              </span>
+              <a
+                className={`font-medium cursor-pointer text-primary ${isLoading ? " pointer-events-none opacity-60" : ""}`}
+                aria-disabled={isLoading}
+                onClick={(e) => {
+                  if (isLoading) e.preventDefault();
+                  navigate("/register");
+                }}
+              >
+                Register
+              </a>
+            </div>
+          </form>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <Field>
-                <Label className="w-full text-gray-800 font-medium text-sm">
-                  Tên đăng nhập
-                </Label>
-                <Input
-                  name="username"
-                  type="text"
-                  required
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
-                  className="mt-2 block w-full px-4 py-2.5 border border-gray-300 bg-white/70 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors"
-                  placeholder="Nhập tên đăng nhập"
-                  disabled={isSubmitting}
-                />
-              </Field>
-            </div>
-            <div>
-              <Field>
-                <Label className="w-full text-gray-800 font-medium text-sm">
-                  Mật khẩu
-                </Label>
-                <Input
-                  name="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="mt-2 block w-full px-4 py-2.5 border border-gray-300 bg-white/70 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors"
-                  placeholder="Nhập mật khẩu"
-                  disabled={isSubmitting}
-                />
-              </Field>
-            </div>
-          </div>
+      </div>
 
-          {error && (
-            <div className="bg-red-50/80 backdrop-blur-sm border border-red-200 text-red-700 px-4 py-3 rounded-md shadow-sm">
-              {error}
-            </div>
-          )}
-
-          <div>
-            <button
-              type="submit"
-              disabled={isSubmitting || !userName || !password}
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed shadow-md transition-all hover:shadow-lg"
-            >
-              {isSubmitting ? (
-                <div className="flex items-center">
-                  <LoadingSpinner />
-                  <span className="ml-2">Đang đăng nhập...</span>
-                </div>
-              ) : (
-                "Đăng nhập"
-              )}
-            </button>
-          </div>
-        </form>
+      <div className="mt-auto py-3 text-center text-color-secondary">
+        <span>© 2025 Trello App - All Rights Reserved</span>
       </div>
     </div>
   );
