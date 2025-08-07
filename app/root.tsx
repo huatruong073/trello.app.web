@@ -8,7 +8,9 @@ import {
 } from "react-router";
 
 import { AuthProvider } from "~/contexts/auth.context";
-import "./app.css";
+import { PrimeConfig } from "~/config/primereact.config";
+import "~/app.css";
+import "~/styles/prime-theme.css";
 
 export const links = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -23,7 +25,7 @@ export const links = () => [
   },
 ];
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export default function App() {
   return (
     <html lang="en">
       <head>
@@ -33,21 +35,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
+        <PrimeConfig>
+          <AuthProvider>
+            <div className="layout-main">
+              <Outlet />
+            </div>
+          </AuthProvider>
+        </PrimeConfig>
         <ScrollRestoration />
         <Scripts />
       </body>
     </html>
-  );
-}
-
-export default function App() {
-  return (
-    <AuthProvider>
-      <div className="w-full min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-100">
-        <Outlet />
-      </div>
-    </AuthProvider>
   );
 }
 

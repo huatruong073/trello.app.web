@@ -1,25 +1,21 @@
+import { Button } from "primereact/button";
+import { InputText } from "primereact/inputtext";
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router";
 import { useAuth } from "~/contexts/auth.context";
-import { LoadingSpinner } from "~/components/loading";
-import { Field, Input, Label } from "@headlessui/react";
 
 export default function Login() {
-  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { login, isAuthenticated, isLoading } = useAuth();
   const navigate = useNavigate();
 
   // Redirect nếu đã đăng nhập
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <LoadingSpinner />
-      </div>
-    );
+    return <div>Loading...</div>;
   }
 
   if (isAuthenticated) {
@@ -29,90 +25,72 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setIsSubmitting(true);
+    setLoading(true);
 
     try {
-      await login(userName, password);
+      await login(email, password);
       navigate("/dashboard");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Đăng nhập thất bại");
     } finally {
-      setIsSubmitting(false);
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white/80 backdrop-blur-sm shadow-xl rounded-xl p-8">
-        <div>
-          <h2 className="mt-2 text-center text-3xl font-extrabold text-gray-900">
-            Đăng nhập vào Trello
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Nhập thông tin đăng nhập của bạn
-          </p>
+    <div className="pages-body login-page flex flex-column">
+      <div className="topbar p-3 flex justify-content-between flex-row align-items-center">
+        <div className="topbar-left ml-3 flex">
+          {/* <div className="logo">
+            <img src="assets/layout/images/logo2x.png" alt="" />
+          </div> */}
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <Field>
-                <Label className="w-full text-gray-800 font-medium text-sm">
-                  Tên đăng nhập
-                </Label>
-                <Input
-                  name="username"
-                  type="text"
-                  required
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
-                  className="mt-2 block w-full px-4 py-2.5 border border-gray-300 bg-white/70 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors"
-                  placeholder="Nhập tên đăng nhập"
-                  disabled={isSubmitting}
-                />
-              </Field>
+        <div className="topbar-right mr-3 flex">
+          <Button
+            // onClick={goDashboard}
+            type="button"
+            label="DASHBOARD"
+            className="p-button-text p-button-plain topbar-button"
+          ></Button>
+        </div>
+      </div>
+
+      <div className="align-self-center mt-auto mb-auto">
+        <div className="pages-panel card flex flex-column">
+          <div className="pages-header px-3 py-1">
+            <h2>LOGIN</h2>
+          </div>
+
+          <h4>Welcome</h4>
+
+          <div className="pages-detail mb-6 px-6">
+            Please use the form to sign-in Ultima network
+          </div>
+
+          <div className="input-panel flex flex-column px-3">
+            <div className="p-inputgroup">
+              <span className="p-inputgroup-addon">
+                <i className="pi pi-envelope"></i>
+              </span>
+              <span className="p-float-label">
+                <InputText type="text" id="inputgroup1" />
+                <label htmlFor="inputgroup1">Email</label>
+              </span>
             </div>
-            <div>
-              <Field>
-                <Label className="w-full text-gray-800 font-medium text-sm">
-                  Mật khẩu
-                </Label>
-                <Input
-                  name="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="mt-2 block w-full px-4 py-2.5 border border-gray-300 bg-white/70 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors"
-                  placeholder="Nhập mật khẩu"
-                  disabled={isSubmitting}
-                />
-              </Field>
+
+            <div className="p-inputgroup mt-3 mb-6">
+              <span className="p-inputgroup-addon">
+                <i className="pi pi-lock"></i>
+              </span>
+              <span className="p-float-label">
+                <InputText type="password" id="inputgroup2" />
+                <label htmlFor="inputgroup2">Password</label>
+              </span>
             </div>
           </div>
 
-          {error && (
-            <div className="bg-red-50/80 backdrop-blur-sm border border-red-200 text-red-700 px-4 py-3 rounded-md shadow-sm">
-              {error}
-            </div>
-          )}
-
-          <div>
-            <button
-              type="submit"
-              disabled={isSubmitting || !userName || !password}
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed shadow-md transition-all hover:shadow-lg"
-            >
-              {isSubmitting ? (
-                <div className="flex items-center">
-                  <LoadingSpinner />
-                  <span className="ml-2">Đang đăng nhập...</span>
-                </div>
-              ) : (
-                "Đăng nhập"
-              )}
-            </button>
-          </div>
-        </form>
+          <Button className="login-button mb-6 px-3" label="LOGIN"></Button>
+        </div>
       </div>
     </div>
   );
