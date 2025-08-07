@@ -38,59 +38,76 @@ export default function Login() {
   };
 
   return (
-    <div className="pages-body login-page flex flex-column">
-      <div className="topbar p-3 flex justify-content-between flex-row align-items-center">
-        <div className="topbar-left ml-3 flex">
-          {/* <div className="logo">
-            <img src="assets/layout/images/logo2x.png" alt="" />
-          </div> */}
-        </div>
-        <div className="topbar-right mr-3 flex">
-          <Button
-            // onClick={goDashboard}
-            type="button"
-            label="DASHBOARD"
-            className="p-button-text p-button-plain topbar-button"
-          ></Button>
+    <div className="flex flex-column border-round-xl min-h-screen bg-gray-100">
+      <div className="align-self-center mt-auto mb-auto">
+        <div className="pages-panel card flex flex-column shadow-4 px-3 py-5 border-round-md">
+          <div className="pages-header px-3 py-1 border-bottom-1 border-300">
+            <h2 className="text-primary">LOGIN</h2>
+          </div>
+
+          <h3 className="font-medium mt-3 mx-3">Welcome Back</h3>
+
+          <div className="pages-detail mb-4 px-6 text-color-secondary">
+            Please sign in to your account to access the Trello App
+          </div>
+
+          <form onSubmit={handleSubmit} className="p-fluid">
+            <div className="input-panel flex flex-column px-3">
+              {error && <div className="p-error mb-3 text-center">{error}</div>}
+              <div className="p-inputgroup">
+                <span className="p-inputgroup-addon">
+                  <i className="pi pi-envelope"></i>
+                </span>
+                <span className="p-float-label">
+                  <InputText
+                    type="text"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                  <label htmlFor="email">Email</label>
+                </span>
+              </div>
+
+              <div className="p-inputgroup mt-3 mb-4">
+                <span className="p-inputgroup-addon">
+                  <i className="pi pi-lock"></i>
+                </span>
+                <span className="p-float-label">
+                  <InputText
+                    type="password"
+                    id="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                  <label htmlFor="password">Password</label>
+                </span>
+              </div>
+              <Button
+                type="submit"
+                className="login-button mb-3"
+                label="LOGIN"
+                icon="pi pi-sign-in"
+                loading={loading}
+                disabled={loading}
+              />
+            </div>
+            <div className="text-center mt-2 mb-4">
+              <span className="text-color-secondary mr-2">
+                Don't have an account?
+              </span>
+              <a href="#" className="font-medium text-primary">
+                Register
+              </a>
+            </div>
+          </form>
         </div>
       </div>
 
-      <div className="align-self-center mt-auto mb-auto">
-        <div className="pages-panel card flex flex-column">
-          <div className="pages-header px-3 py-1">
-            <h2>LOGIN</h2>
-          </div>
-
-          <h4>Welcome</h4>
-
-          <div className="pages-detail mb-6 px-6">
-            Please use the form to sign-in Ultima network
-          </div>
-
-          <div className="input-panel flex flex-column px-3">
-            <div className="p-inputgroup">
-              <span className="p-inputgroup-addon">
-                <i className="pi pi-envelope"></i>
-              </span>
-              <span className="p-float-label">
-                <InputText type="text" id="inputgroup1" />
-                <label htmlFor="inputgroup1">Email</label>
-              </span>
-            </div>
-
-            <div className="p-inputgroup mt-3 mb-6">
-              <span className="p-inputgroup-addon">
-                <i className="pi pi-lock"></i>
-              </span>
-              <span className="p-float-label">
-                <InputText type="password" id="inputgroup2" />
-                <label htmlFor="inputgroup2">Password</label>
-              </span>
-            </div>
-          </div>
-
-          <Button className="login-button mb-6 px-3" label="LOGIN"></Button>
-        </div>
+      <div className="mt-auto py-3 text-center text-color-secondary">
+        <span>© 2025 Trello App - All Rights Reserved</span>
       </div>
     </div>
   );
