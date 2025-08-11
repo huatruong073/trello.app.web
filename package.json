@@ -12,6 +12,7 @@
     "@react-router/node": "^7.7.1",
     "@react-router/serve": "^7.7.1",
     "axios": "^1.11.0",
+    "final-form": "^5.0.0",
     "isbot": "^5.1.27",
     "jwt-decode": "^4.0.0",
     "primeflex": "^3.3.1",
@@ -19,6 +20,7 @@
     "primereact": "^9.6.5",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-final-form": "^7.0.0",
     "react-router": "^7.7.1"
   },
   "devDependencies": {
